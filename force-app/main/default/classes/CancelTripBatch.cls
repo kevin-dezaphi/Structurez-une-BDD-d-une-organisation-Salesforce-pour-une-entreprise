@@ -1,7 +1,13 @@
 public with sharing class CancelTripBatch implements Database.Batchable<SObject> {
     public Database.QueryLocator start(Database.BatchableContext BC) {
         Date oneWeekAfterToday = Date.today().addDays(7);
-        return Database.getQueryLocator('SELECT Id, Status__c FROM Trip__c WHERE Start_Date__c < :oneWeekAfterToday AND Status__c != \'Annulé\' AND Number_Participants__c != null AND Number_Participants__c < 10');
+        String query = 'SELECT Id, Status__c ';
+        query += 'FROM Trip__c ';
+        query += 'WHERE Start_Date__c < :oneWeekAfterToday ';
+        query += 'AND Status__c != \'Annulé\' ';
+        query += 'AND Number_Participants__c != null ';
+        query += 'AND Number_Participants__c < 10';
+        return Database.getQueryLocator(query);
     }
 
     public void execute(Database.BatchableContext BC, List<Trip__c> scope) {
